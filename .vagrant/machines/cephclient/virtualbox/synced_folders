@@ -1,0 +1,1 @@
+{"rsync":{"/vagrant":{"type":"rsync","guestpath":"/vagrant","hostpath":"/home/marcelo/MARCELO/netstorage-ceph-debian","disabled":false,"__vagrantfile":true,"owner":"vagrant","group":"vagrant"}}}
