@@ -30,27 +30,40 @@ Vagrant.configure("2") do |config|
      config.vm.disk :disk, size: "10GB", name: "extra_storage"
   end
 
-  config.vm.define "cephosd2" do |config|
-     config.vm.provision :shell, :inline => "ip addr | grep \"inet\" | awk '{print $2}'"
-     config.vm.network "private_network", ip: "192.168.50.22", virtualbox__intnet: "true"
-     config.vm.disk :disk, size: "10GB", name: "extra_storage"
-  end
-
-  config.vm.define "cephosd3" do |config|
-     config.vm.provision :shell, :inline => "ip addr | grep \"inet\" | awk '{print $2}'"
-     config.vm.network "private_network", ip: "192.168.50.23", virtualbox__intnet: "true"
-     config.vm.disk :disk, size: "10GB", name: "extra_storage"
-  end
+  # config.vm.define "cephosd2" do |config|
+  #    config.vm.provision :shell, :inline => "ip addr | grep \"inet\" | awk '{print $2}'"
+  #    config.vm.network "private_network", ip: "192.168.50.22", virtualbox__intnet: "true"
+  #    config.vm.disk :disk, size: "10GB", name: "extra_storage"
+  # end
+  #
+  # config.vm.define "cephosd3" do |config|
+  #    config.vm.provision :shell, :inline => "ip addr | grep \"inet\" | awk '{print $2}'"
+  #    config.vm.network "private_network", ip: "192.168.50.23", virtualbox__intnet: "true"
+  #    config.vm.disk :disk, size: "10GB", name: "extra_storage"
+  # end
 
   # Enable provisioning with a shell script. Additional provisioners such as
   # Ansible, Chef, Docker, Puppet and Salt are also available. Please see the
   # documentation for more information about their specific syntax and use.
+  #
+  # apt-get update
+  # apt-get install -y python python-pip parted xfsprogs
+  # sudo useradd -m -s /bin/bash cephuser
+  # sudo passwd -d cephuser
+  # echo 'cephuser ALL=(ALL) NOPASSWD:ALL' | sudo tee /etc/sudoers.d/cephuser
+  # sudo chmod 0440 /etc/sudoers.d/cephuser
+  # mkdir /home/cephuser/.ssh
+  # cat ./demo.pub >> /home/cephuser/.ssh/authorized_keys
   config.vm.provision "shell", inline: <<-SHELL
-    apt-get update
-    apt-get install -y python python-pip parted xfsprogs
-    sudo useradd -m -s /bin/bash cephuser
-    sudo passwd -d cephuser
-    echo 'cephuser ALL=(ALL) NOPASSWD:ALL' | sudo tee /etc/sudoers.d/cephuser
-    sudo chmod 0440 /etc/sudoers.d/cephuser
+    echo "
+    192.168.50.10 cephclient
+    192.168.50.10 cephadm1
+    192.168.50.11 cephmon1
+    192.168.50.12 cephmon2
+    192.168.50.13 cephmon3
+    192.168.50.21 cephosd1
+    192.168.50.22 cephosd2
+    192.168.50.33 cephosd3
+    " | sudo tee -a /etc/hosts'
   SHELL
 end
